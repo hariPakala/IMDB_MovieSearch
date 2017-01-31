@@ -1,0 +1,84 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+<h:head>
+   <title>IMDB Demo</title>
+      	  <link rel="stylesheet" href="css/irstyle.css" type="text/css" media="all" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript">
+function doPopup(text) {
+    //you can use the source to access a information that you need
+     isPopup = false;
+     if(isPopup) {//open as popup
+          popup = window.open('child.xhtml',
+          'height=400,width=400,toolbar=no,menubar=no,'
+          + 'scrollbars=yes');                    
+      }else{ //open as new window tab
+          popup = window.open('child.xhtml','_blank');
+      }
+      //set a value in the var openerFormId in the new window  
+      popup.focus();
+}
+</script>
+          </h:head>
+
+<h:body>
+   <h:panelGroup layout = "block" id = "searchContainer">
+    <h:form>
+        <h:inputText id="search" placeholder = "Enter the search text" styleClass="searchBox" value = "#{searchMovieBean.searchMovie}"  >
+        </h:inputText>
+        <h:commandButton value="Search" styleClass = "searchButton" title="Search" actionListener="#{searchMovieBean.executeQuery}" update = ":update_movie_results" >
+				 <f:ajax execute="@form" render = ":update_movie_results" />
+        </h:commandButton>
+        <h:outputText value="#{searchMovieBean.searchMovie}" />
+    </h:form>
+   </h:panelGroup>	
+   
+   <h:panelGroup id = "update_movie_results">
+   <ul id = "movieresults" class = "movies"  >
+   	<ui:repeat value="#{searchMovieBean.queryresponse}" var="searchResult" >
+   	<li>
+
+						<table width = '100%'  class = "movieresult">
+							<tr>
+								<td class= "movieattr"><h:graphicImage library="images" value='#{searchResult.imgfile}' /></td>
+								<td class="movieattr">Movie Name : #{searchResult.moviename}</td>
+								<td class="movieattr">Release Date : #{searchResult.releasedate}</td>
+								
+							</tr>
+							<tr>
+							<td class="movieattr">Rating : #{searchResult.rating}</td>
+								<td class="movieattr">Genre 1 : #{searchResult.genre1}</td>
+								<td class="movieattr">Genre 1 : #{searchResult.genre2}</td>
+								<td class="movieattr">Director : #{searchResult.director}</td>
+							</tr>
+							<tr>
+								<td class="movieattr">Writer : #{searchResult.writer}</td>
+								<td class="movieattr">Actor 1 : #{searchResult.cast1}</td>
+								<td class="movieattr">Actor 2 : #{searchResult.cast2}</td>
+							</tr>
+								<tr>
+								<td>
+								<h:form>
+								<h:outputLink value= '#{searchResult.htmlfile}' target="_blank">Critique Review</h:outputLink>
+							
+								</h:form>
+						</td>
+							</tr>		
+		
+							</table>
+						
+    </li>
+   	</ui:repeat>
+   	</ul>
+   	</h:panelGroup>
+
+
+</h:body>
+    		
+</f:view>
+</html>
